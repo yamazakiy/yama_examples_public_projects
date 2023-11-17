@@ -1,11 +1,16 @@
 # yama_examples_public_projects
 公開用のサンプルプロジェクト置き場です。おそらくリファクタリングしていない状態のものがあるのでご容赦ください。
 
+
 ## project_yama_examples_beta
 いろいろ思い付きで作っています。
 
+
 ### ゆらゆらペイント
+物体落下みたいなの作ろうと始めたら、最終的にゆらゆらペイントになりました。<br>
+
 https://github.com/yamazakiy/yama_examples_public_projects/assets/73773018/a814d3f8-9b04-43ea-b7ca-4bec740bf961
+
 ```
 起動クラス：yama.CreatePointsStartup
 起動パラメータ：なし
