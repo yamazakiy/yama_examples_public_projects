@@ -26,6 +26,7 @@ import yama.bingo.service.BingoServiceMessageKey;
 import yama.bingo.service.view.BingoServiceViewInterface;
 import yama.bingo.service.view.types.gui_standard.BingoServiceStandardFrameColorManager.ColorKey;
 import yama.bingo.service.view.types.gui_standard.component.BingoNumberLabel;
+import yama.bingo.service.view.types.gui_standard.component.SortButton;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationCallback;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationInterface;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeBound;
@@ -68,12 +69,14 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 	private YLabel _messageLabel;
 	/** 抽選番号ラベル */
 	private BingoNumberLabel _pickNumberLabel;
-	/** ビンゴ番号一覧 */
+	/** 抽選番号一覧 */
 	private BingoNumberLabel[] _historyNumberLabels;
 	/** 番号抽選ボタン */
 	private YButton _pickButton;
 	/** 色モードボタン */
 	private YButton _colorModeButton;
+	/** ソートボタン */
+	private SortButton _sortButton;
 	/** リセットボタン */
 	private YButton _resetButton;
 	/** 終了ボタン */
@@ -199,14 +202,8 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 			)
 		);
 		_pickNumberLabel.setBingoNumber(num);
-		// 
-		{
-			int index = 0;
-			// 
-			for (int n : BingoService.getInstance().getBingoNumberListRef()) {
-				_historyNumberLabels[index ++].setBingoNumber(n);
-			}
-		}
+		// 抽選番号一覧表示更新
+		updateHistoryNumberLabels();
 	}
 	
 	/**
@@ -308,6 +305,31 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 	}
 	
 	/**
+	 * 抽選番号一覧の表示を更新します。
+	 */
+	private void updateHistoryNumberLabels() {
+		// 
+		List<Integer> list = BingoService.getInstance().getBingoNumberListRef();
+		// 
+		switch (_sortButton.getSortType()) {
+			case SortButton.SortType.ASC: // 昇順
+				Collections.sort(list);
+				break;
+			case SortButton.SortType.DESC: // 降順
+				Collections.sort(list, Collections.reverseOrder());
+				break;
+			case SortButton.SortType.ORIGINAL: // 抽選順
+			default:
+		}
+		// 
+		int index = 0;
+		// 
+		for (int n : list) {
+			_historyNumberLabels[index ++].setBingoNumber(n);
+		}
+	}
+	
+	/**
 	 * コンポーネントを設定します。
 	 * @param c Container
 	 */
@@ -346,7 +368,7 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 		}
 		{
 			YButton[] buttons = new YButton[] {
-				_pickButton = new YButton(COMMAND_PICK), _colorModeButton = new YButton(COMMAND_COLOR_MODE), _resetButton = new YButton(COMMAND_RESET), _exitButton = new YButton(COMMAND_EXIT)
+				_pickButton = new YButton(COMMAND_PICK), _colorModeButton = new YButton(COMMAND_COLOR_MODE), _sortButton = new SortButton(), _resetButton = new YButton(COMMAND_RESET), _exitButton = new YButton(COMMAND_EXIT)
 			};
 			// 
 			JPanel p = YComponentFactory.createLayoutPanel(new GridLayout(1, buttons.length));
@@ -423,6 +445,8 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 			_pickButton.setBackground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_BACKGROUND));
 			_colorModeButton.setForeground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_FOREGROUND));
 			_colorModeButton.setBackground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_BACKGROUND));
+			_sortButton.setForeground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_FOREGROUND));
+			_sortButton.setBackground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_BACKGROUND));
 			_resetButton.setForeground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_FOREGROUND));
 			_resetButton.setBackground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_BACKGROUND));
 			_exitButton.setForeground(map.get(BingoServiceStandardFrameColorManager.ColorKey.BUTTON_FOREGROUND));
@@ -446,6 +470,9 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 		} else if (e.getSource() == _colorModeButton) {
 			// 
 			colorModeButtonActionPerformed();
+		} else if (e.getSource() == _sortButton) {
+			// 
+			sortButtonActionPerformed();
 		} else if (e.getSource() == _resetButton) {
 			// 
 			resetButtonActionPerformed();
@@ -474,6 +501,14 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 	private void colorModeButtonActionPerformed() {
 		// 色モード変更
 		changeColorMode();
+	}
+	
+	/**
+	 * ソートボタンの処理です。
+	 */
+	private void sortButtonActionPerformed() {
+		// 抽選番号一覧表示更新
+		updateHistoryNumberLabels();
 	}
 	
 	/**
