@@ -30,6 +30,7 @@ import yama.bingo.service.view.types.gui_standard.component.SortButton;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationCallback;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationInterface;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeBound;
+import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeCMMasuda01;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeFalling;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeLoop;
 import yama.bingo.service.view.types.gui_standard.component.animation.BingoPickAnimationTypeRandom;
@@ -397,6 +398,7 @@ public class BingoServiceStandardFrame extends YAbstractFrameFPSTargetMonitor im
 			_bingoPickAnimationList.add(new BingoPickAnimationTypeTextLineLoop(_pickNumberLabel, new Font(fontNameAN, Font.PLAIN, 40)));
 			_bingoPickAnimationList.add(new BingoPickAnimationTypeSwing(_pickNumberLabel, new Font(fontNameAN, Font.PLAIN, 40)));
 			_bingoPickAnimationList.add(new BingoPickAnimationTypeTextBoxLoop(_pickNumberLabel, new Font(fontNameAN, Font.PLAIN, 40)));
+			_bingoPickAnimationList.add(new BingoPickAnimationTypeCMMasuda01(_pickNumberLabel, new Font(fontNameAN, Font.PLAIN, 480)));
 		}
 		{
 			// 初期色モード
